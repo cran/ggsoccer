@@ -1,10 +1,13 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+# ggsoccer <img src="man/figures/logo.png" width="160px" align="right" />
+
+[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/ggsoccer)](https://cran.r-project.org/package=ggsoccer)
+[![CRAN\_Version\_Badge](https://cranlogs.r-pkg.org/badges/ggsoccer?color=ff69b4)](https://cran.r-project.org/package=ggsoccer)
+[![lifecycle](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
 [![Travis build
 status](https://travis-ci.org/Torvaney/ggsoccer.svg?branch=master)](https://travis-ci.org/Torvaney/ggsoccer)
-
-# ggsoccer <img src="man/figures/logo.png" width="160px" align="right" />
 
 ## Overview
 
@@ -13,12 +16,18 @@ soccer event data in R/ggplot2.
 
 ## Installation
 
-ggsoccer is not currently available on CRAN and must be downloaded from
-github like so:
+ggsoccer is available via CRAN:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("torvaney/ggsoccer")
+install.packages("ggsoccer")
+```
+
+Alternatively, you can download the development version from github like
+so:
+
+``` r
+# install.packages("remotes")
+remotes::install_github("torvaney/ggsoccer")
 ```
 
 ## Usage
@@ -38,9 +47,6 @@ The following example uses ggsoccer to solve a realistic problem:
 plotting a set of passes onto a soccer pitch.
 
 ``` r
-library(ggplot2)
-library(ggsoccer)
-
 pass_data <- data.frame(x = c(24, 18, 64, 78, 53),
                         y = c(43, 55, 88, 18, 44),
                         x2 = c(34, 44, 81, 85, 64),
@@ -74,9 +80,9 @@ y-axis to ensure that the orientation remains correct.
 NOTE: Ordinarily, we would just do this with `scale_y_reverse`. However,
 due to a [bug in
 ggplot2](https://github.com/tidyverse/ggplot2/issues/3120), this results
-in certain elements of the pitch (center and penalty box arcs) failing
-to render. Instead, we can flip the y coordinates manually (`100 - y` in
-this case).
+in certain elements of the pitch (centre circle and penalty box arcs)
+failing to render. Instead, we can flip the y coordinates manually (`100
+- y` in this case).
 
 ``` r
 
@@ -85,16 +91,16 @@ shots <- data.frame(x = c(90, 85, 82, 78, 83, 74, 94, 91),
 
 ggplot(shots) +
   annotate_pitch(colour = "white",
-                 fill   = "chartreuse4",
+                 fill   = "#7fc47f",
                  limits = FALSE) +
   geom_point(aes(x = x, y = 100 - y),
-             colour = "yellow", 
-             size = 4) +
+             colour = "black", 
+             fill = "chartreuse4", 
+             pch = 21,
+             size = 2) +
   theme_pitch() +
-  theme(plot.background = element_rect(fill = "chartreuse4"),
-        title = element_text(colour = "white")) +
   coord_flip(xlim = c(49, 101),
-             ylim = c(-1, 101)) +
+             ylim = c(-12, 112)) +
   ggtitle("Simple shotmap",
           "ggsoccer example")
 ```
@@ -116,16 +122,18 @@ well as an interface for any custom coordinate system:
 #### Statsbomb
 
 ``` r
-# Roughly rescale shots to use StatsBomb-style coordinates
-passes_rescaled <- data.frame(x  = pass_data$x * 1.20,
-                              y  = pass_data$y * 0.80,
-                              x2 = pass_data$x2 * 1.20,
-                              y2 = pass_data$y2 * 0.80)
+# ggsoccer enables you to rescale coordinates from one data provider to another, too
+to_statsbomb <- rescale_coordinates(from = pitch_opta, to = pitch_statsbomb)
+
+passes_rescaled <- data.frame(x  = to_statsbomb$x(pass_data$x),
+                              y  = to_statsbomb$y(pass_data$y),
+                              x2 = to_statsbomb$x(pass_data$x2),
+                              y2 = to_statsbomb$y(pass_data$y2))
 
 ggplot(passes_rescaled) +
   annotate_pitch(dimensions = pitch_statsbomb) +
   geom_segment(aes(x = x, y = y, xend = x2, yend = y2),
-               colour = "firebrick",
+               colour = "coral",
                arrow = arrow(length = unit(0.25, "cm"),
                              type = "closed")) +
   theme_pitch() +
@@ -171,3 +179,9 @@ Depending on your use case, you may want to check these out too:
   - [soccermatics](https://github.com/JoGall/soccermatics)
   - [SBpitch](https://github.com/FCrSTATS/SBpitch)
   - [fc.rstats](https://github.com/FCrSTATS/fc.rstats)
+
+### Python
+
+  - If you have the misfortune of being stuck with matplotlib,
+    [matplotsoccer](https://github.com/TomDecroos/matplotsoccer) might
+    be able to help you out.

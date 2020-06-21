@@ -23,6 +23,15 @@
 #'  \item{"origin_y"}{The minimum y coordinate of the pitch}
 #' }
 #'
+#' The following pitch dimensions are provided
+#' \itemize{
+#'  \item{"pitch_opta"}{For Opta f24 data}
+#'  \item{"pitch_statsbomb"}{For Statsbomb data}
+#'  \item{"pitch_wyscout"}{For Wyscout data}
+#'  \item{"pitch_international"}{As per UEFA Category 4 stadium regulations}
+#'  \item{"pitch_tracab"}{"For ChyronHego Tracab, using the 105m x 68m default size"}
+#' }
+#'
 #' @examples
 #' library(ggplot2)
 #' library(ggsoccer)
@@ -30,6 +39,8 @@
 #' ggplot() +
 #'   annotate_pitch(dimensions = pitch_statsbomb) +
 #'   theme_pitch()
+#'
+#' @seealso `make_pitch_tracab`
 #'
 #' @export
 pitch_opta <- list(
@@ -76,3 +87,61 @@ pitch_wyscout <- list(
   origin_x = 0,
   origin_y = 0
 )
+
+#' @rdname pitch_opta
+#' @export
+# As per UEFA Category 4 regulations
+# Source: https://www.sportscourtdimensions.com/soccer/
+pitch_international <- list(
+  length = 100,
+  width = 68,
+  penalty_box_length = 16.5,
+  penalty_box_width = 40.32,
+  six_yard_box_length = 5.5,
+  six_yard_box_width = 18.32,
+  penalty_spot_distance = 11,
+  goal_width = 7.32,
+  origin_x = 0,
+  origin_y = 0
+)
+
+
+#' Create Tracab dimensions object from pitch length and width
+#'
+#' @description When the actual length and width of a pitch are known,
+#' for example from Tracab file metadata, `make_pitch_tracab` can be
+#' used to replace the 105m x 68m defaults hardcoded in `pitch_tracab`.
+#' The remaining pitch markings are taken from the
+#' UEFA Category 4 standard (`pitch_international`).
+#'
+#' @param length Length of the pitch in metres
+#' @param width Width of the pitch in metres
+#'
+#' @return A named list of pitch marking coordinates.
+#'
+#' @examples
+#' library(ggplot2)
+#' library(ggsoccer)
+#'
+#' ggplot() +
+#'   annotate_pitch(dimensions = make_pitch_tracab(110, 70)) +
+#'   theme_pitch()
+#'
+#'
+#' @seealso `pitch_tracab`
+#'
+#' @export
+make_pitch_tracab <- function(length=105, width=68){
+  pitch_tracab <- lapply(pitch_international, function(x) 100.0*x) # cm
+  pitch_tracab["length"] <- 100.0*length
+  pitch_tracab["width"] <- 100.0*width
+  pitch_tracab["origin_x"] <- -pitch_tracab[["length"]]/2.0
+  pitch_tracab["origin_y"] <- -pitch_tracab[["width"]]/2.0
+
+  pitch_tracab
+}
+
+
+#' @rdname pitch_opta
+#' @export
+pitch_tracab <- make_pitch_tracab()

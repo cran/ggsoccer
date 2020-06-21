@@ -1,9 +1,21 @@
+# ggsoccer 0.1.6.9000 (In progress)
+
+* Add support for Tracab pitch dimensions (`pitch_tracab` and `make_pitch_tracab`)
+* Make direction arrow an annotation
+  * This ensures it will display properly for a ggplot without any data
+
+# ggsoccer 0.1.5
+
+* Make line widths consistent across all pitch elements
+* Convert coordinates between different pitch specifications
+* Add UEFA-standard pitch dimensions (`pitch_international`)
+
 # ggsoccer 0.1.4
 
+* Released to CRAN!
 * Link penalty box arc to pitch specification
   * Fixes a previous issue in which the edge of a circle could be seen poking
     out from behind the pitch (#8).
-
 
 # ggsoccer 0.1.3
 

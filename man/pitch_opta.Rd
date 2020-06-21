@@ -5,14 +5,30 @@
 \alias{pitch_opta}
 \alias{pitch_statsbomb}
 \alias{pitch_wyscout}
+\alias{pitch_international}
+\alias{pitch_tracab}
 \title{Pitch dimensions}
-\format{An object of class \code{list} of length 10.}
+\format{
+An object of class \code{list} of length 10.
+
+An object of class \code{list} of length 10.
+
+An object of class \code{list} of length 10.
+
+An object of class \code{list} of length 10.
+
+An object of class \code{list} of length 10.
+}
 \usage{
 pitch_opta
 
 pitch_statsbomb
 
 pitch_wyscout
+
+pitch_international
+
+pitch_tracab
 }
 \description{
 The coordinate system used to generate pitch markings in
@@ -38,6 +54,15 @@ coordinate system. The required dimensions are:
 \item{"origin_x"}{The minimum x coordinate of the pitch}
 \item{"origin_y"}{The minimum y coordinate of the pitch}
 }
+
+The following pitch dimensions are provided
+\itemize{
+\item{"pitch_opta"}{For Opta f24 data}
+\item{"pitch_statsbomb"}{For Statsbomb data}
+\item{"pitch_wyscout"}{For Wyscout data}
+\item{"pitch_international"}{As per UEFA Category 4 stadium regulations}
+\item{"pitch_tracab"}{"For ChyronHego Tracab, using the 105m x 68m default size"}
+}
 }
 \examples{
 library(ggplot2)
@@ -47,5 +72,8 @@ ggplot() +
   annotate_pitch(dimensions = pitch_statsbomb) +
   theme_pitch()
 
+}
+\seealso{
+\code{make_pitch_tracab}
 }
 \keyword{datasets}
