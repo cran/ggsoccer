@@ -3,16 +3,18 @@
 
 # ggsoccer <img src="man/figures/logo.png" width="160px" align="right" />
 
-[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/ggsoccer)](https://cran.r-project.org/package=ggsoccer)
-[![CRAN\_Version\_Badge](https://cranlogs.r-pkg.org/badges/ggsoccer?color=ff69b4)](https://cran.r-project.org/package=ggsoccer)
-[![lifecycle](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
-[![Travis build
-status](https://travis-ci.org/Torvaney/ggsoccer.svg?branch=master)](https://travis-ci.org/Torvaney/ggsoccer)
+<!-- badges: start -->
+
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/ggsoccer)](https://cran.r-project.org/package=ggsoccer)
+[![CRAN_Version_Badge](https://cranlogs.r-pkg.org/badges/ggsoccer?color=ff69b4)](https://cran.r-project.org/package=ggsoccer)
+[![lifecycle](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+[![R-CMD-check](https://github.com/Torvaney/ggsoccer/workflows/R-CMD-check/badge.svg)](https://github.com/Torvaney/ggsoccer/actions)
+<!-- badges: end -->
 
 ## Overview
 
-ggsoccer provides a handful of functions that make it easy to plot
-soccer event data in R/ggplot2.
+ggsoccer provides a functions for plotting soccer event data in
+R/ggplot2.
 
 ## Installation
 
@@ -65,42 +67,42 @@ ggplot(pass_data) +
 
 ![](man/figures/README-example_passes-1.png)<!-- -->
 
-Because ggsoccer is implemented as ggplot layers, it makes customising a
-plot very easy. Here is a different example, plotting shots on a
-**green** pitch.
+Because ggsoccer is implemented as ggplot layers, plots can be
+customised with standard ggplot functions and layers.
 
-Note that by default, ggsoccer will display the whole pitch. To display
-a subsection of the pitch, simply set the plot limits as you would with
-any other ggplot2 plot. Here, we use the `xlim` and `ylim` arguments to
+Here is a different example, plotting shots on a **green** pitch.
+
+By default, ggsoccer will display the whole pitch. To display a
+subsection of the pitch, set the plot limits as you would with any other
+ggplot2 plot. Here, we use the `xlim` and `ylim` arguments to
 `coord_flip`.
 
-Because of the way coordinates get flipped, we must also reverse the
-y-axis to ensure that the orientation remains correct.
+`coord_flip` reverses the orientation of the points, so we must also
+reverse the y-axis to ensure that the orientation remains correct (that
+is, shots from the left hand side appear on the left, and right-sided
+shots appear on the right).
 
-NOTE: Ordinarily, we would just do this with `scale_y_reverse`. However,
-due to a [bug in
-ggplot2](https://github.com/tidyverse/ggplot2/issues/3120), this results
-in certain elements of the pitch (centre circle and penalty box arcs)
-failing to render. Instead, we can flip the y coordinates manually (`100
-- y` in this case).
+You can do this with either `scale_y_reverse` or by reversing the order
+of the limits in `coord_flip`’s `ylim` argument.
+
+If you don’t correct (i.e. reverse) the y axis orientation, the penalty
+box arcs will appear inside the box!
 
 ``` r
-
 shots <- data.frame(x = c(90, 85, 82, 78, 83, 74, 94, 91),
                     y = c(43, 40, 52, 56, 44, 71, 60, 54))
 
 ggplot(shots) +
   annotate_pitch(colour = "white",
-                 fill   = "#7fc47f",
+                 fill   = "springgreen4",
                  limits = FALSE) +
-  geom_point(aes(x = x, y = 100 - y),
-             colour = "black", 
-             fill = "chartreuse4", 
-             pch = 21,
-             size = 2) +
+  geom_point(aes(x = x, y = y),
+             colour = "yellow",
+             size = 4) +
   theme_pitch() +
-  coord_flip(xlim = c(49, 101),
-             ylim = c(-12, 112)) +
+  theme(panel.background = element_rect(fill = "springgreen4")) +
+  coord_flip(xlim = c(49, 101)) +
+  scale_y_reverse() +
   ggtitle("Simple shotmap",
           "ggsoccer example")
 ```
@@ -115,9 +117,9 @@ different data providers may use alternative coordinates.
 ggsoccer provides support for a few data providers out of the box, as
 well as an interface for any custom coordinate system:
 
-  - Opta
-  - Statsbomb
-  - Wyscout
+- Opta
+- Statsbomb
+- Wyscout
 
 #### Statsbomb
 
@@ -146,7 +148,7 @@ ggplot(passes_rescaled) +
 
 #### Custom data
 
-To plot data for a dataset not provided, ggsoccer just requires a pitch
+To plot data for a dataset not provided, ggsoccer requires a pitch
 specification. This is a list containing the required pitch dimensions
 like so:
 
@@ -155,7 +157,7 @@ pitch_custom <- list(
   length = 150,
   width = 100,
   penalty_box_length = 25,
-  penalty_box_width = 50,
+  penalty_box_width = 60,
   six_yard_box_length = 8,
   six_yard_box_width = 26,
   penalty_spot_distance = 16,
@@ -171,17 +173,90 @@ ggplot() +
 
 ![](man/figures/README-example_custom-1.png)<!-- -->
 
+### Goals
+
+ggsoccer allows you to customise your goals markings by supplying a
+function to the `goals` argument of `annotate_pitch`:
+
+``` r
+ggplot() +
+  annotate_pitch(fill = "steelblue4", colour = "white", goals = goals_line) +
+  theme_pitch() +
+  theme(panel.background = element_rect(fill = "steelblue4"))
+```
+
+![](man/figures/README-example_goals_line-1.png)<!-- -->
+
+``` r
+ggplot() +
+  annotate_pitch(goals = goals_strip, fill = "lightgray") +
+  theme_pitch()
+```
+
+![](man/figures/README-example_goals_strip-1.png)<!-- -->
+
+This argument takes a function (or one-sided formula). You can use the
+supplied functions, or create your own goal markings function. The
+`goals` argument also supports using one-sided formulas as lambda
+functions (see
+[`rlang::as_function`](https://rlang.r-lib.org/reference/as_function.html)).
+
+Custom goals functions must accept the arguments used by
+`annotate_pitch`: `colour`, `fill`, `dimensions`, `linewidth`, `alpha`,
+and `linetype`. Additional arguments can also be added.
+
+``` r
+goals_custom <- function(colour, fill, dimensions, ...) {
+  goals_strip(colour, fill, dimensions, lineend = "square", linewidth = 3.5)
+}
+
+ggplot() +
+  annotate_pitch(
+    goals = goals_custom, 
+    fill = "lightgray"
+  ) +
+  theme_pitch()
+```
+
+![](man/figures/README-example_goals_custom-1.png)<!-- -->
+
+See `help(goals_box)` for the full list of available functions.
+
+The idea for having multiple goal markings was taken and adapted from
+the [fc.rstats](https://github.com/FCrSTATS/fc.rstats) package.
+
+### Further customisation
+
+You can also alter the style of pitch markings with `linewidth`,
+`alpha`, and `linetype`:
+
+``` r
+ggplot() +
+  annotate_pitch(
+    colour = "white", 
+    linewidth = 1.5, 
+    linetype = "12", 
+    alpha = 0.2, 
+    goals = goals_line
+  ) +
+  theme_pitch() +
+  theme(panel.background = element_rect(fill = "steelblue"))
+```
+
+![](man/figures/README-example_further_customisation-1.png)<!-- -->
+
 ## Other options
 
 There are other packages that offer alternative pitch plotting options.
 Depending on your use case, you may want to check these out too:
 
-  - [soccermatics](https://github.com/JoGall/soccermatics)
-  - [SBpitch](https://github.com/FCrSTATS/SBpitch)
-  - [fc.rstats](https://github.com/FCrSTATS/fc.rstats)
+- [soccermatics](https://github.com/JoGall/soccermatics)
+- [SBpitch](https://github.com/FCrSTATS/SBpitch)
+- [fc.rstats](https://github.com/FCrSTATS/fc.rstats)
 
 ### Python
 
-  - If you have the misfortune of being stuck with matplotlib,
-    [matplotsoccer](https://github.com/TomDecroos/matplotsoccer) might
-    be able to help you out.
+There are a couple of pitch plotting options for matplotlib, too:
+
+- [mplsoccer](https://github.com/andrewRowlinson/mplsoccer)
+- [matplotsoccer](https://github.com/TomDecroos/matplotsoccer)

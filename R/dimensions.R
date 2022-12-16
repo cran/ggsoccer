@@ -58,6 +58,10 @@ pitch_opta <- list(
 
 #' @rdname pitch_opta
 #' @export
+pitch_statsperform <- pitch_opta
+
+#' @rdname pitch_opta
+#' @export
 # Source: https://github.com/statsbomb/open-data/blob/master/doc/StatsBomb%20Event%20Data%20Specification%20v1.0.2.pdf
 pitch_statsbomb <- list(
   length = 120,
@@ -91,9 +95,9 @@ pitch_wyscout <- list(
 #' @rdname pitch_opta
 #' @export
 # As per UEFA Category 4 regulations
-# Source: https://www.sportscourtdimensions.com/soccer/
+# Source: https://en.wikipedia.org/wiki/UEFA_stadium_categories
 pitch_international <- list(
-  length = 100,
+  length = 105,
   width = 68,
   penalty_box_length = 16.5,
   penalty_box_width = 40.32,

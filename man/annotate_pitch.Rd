@@ -8,17 +8,30 @@ annotate_pitch(
   colour = "dimgray",
   fill = "white",
   limits = TRUE,
-  dimensions = pitch_opta
+  dimensions = pitch_opta,
+  goals = goals_box,
+  linewidth = 0.5,
+  alpha = 1,
+  linetype = "solid"
 )
 }
 \arguments{
 \item{colour}{Colour of pitch outline.}
 
-\item{fill}{Colour of pitch fill}
+\item{fill}{Colour of pitch fill.}
 
 \item{limits}{Whether to adjust the plot limits to display the whole pitch.}
 
 \item{dimensions}{A list containing the pitch dimensions to draw. See \code{help(pitch_opta)}.}
+
+\item{goals}{A function for generating goal markings. Defaults to \code{goals_box}.
+See \code{help(goals_box)}. Formulas are turned into functions with \code{rlang::as_function}.}
+
+\item{linewidth}{The linewidth of the pitch markings}
+
+\item{alpha}{The transparency of the pitch markings and fill}
+
+\item{linetype}{The linetype of the pitch markings (e.g. "dotted")}
 }
 \value{
 list of ggplot geoms to be added to a ggplot plot
