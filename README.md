@@ -114,12 +114,14 @@ ggplot(shots) +
 ggsoccer defaults to Opta’s 100x100 coordinate system. However,
 different data providers may use alternative coordinates.
 
-ggsoccer provides support for a few data providers out of the box, as
-well as an interface for any custom coordinate system:
+ggsoccer provides support for a few data providers out of the box:
 
-- Opta
-- Statsbomb
-- Wyscout
+- StatsPerform/Opta (`pitch_statsperform`, default)
+- Statsbomb (`pitch_statsbomb`)
+- Wyscout (`pitch_wyscout`)
+- Tracab (`make_pitch_tracab()`)
+
+ggsoccer also provides an interface for any custom coordinate system.
 
 #### Statsbomb
 
@@ -162,8 +164,8 @@ pitch_custom <- list(
   six_yard_box_width = 26,
   penalty_spot_distance = 16,
   goal_width = 12,
-  origin_x = 0,
-  origin_y = 0
+  origin_x = -50,
+  origin_y = -75
 )
 
 ggplot() +
@@ -253,6 +255,7 @@ Depending on your use case, you may want to check these out too:
 - [soccermatics](https://github.com/JoGall/soccermatics)
 - [SBpitch](https://github.com/FCrSTATS/SBpitch)
 - [fc.rstats](https://github.com/FCrSTATS/fc.rstats)
+- [sportyR](https://github.com/sportsdataverse/sportyR)
 
 ### Python
 

@@ -9,28 +9,26 @@
 #'
 #' @details A "pitch specification" is simply a list of dimensions that define a
 #' coordinate system. The required dimensions are:
+#' * "length": The length of the pitch from one goal to the other (x axis)
+#' * "width": The width of the pitch from touchline to the other (y axis)
+#' * "penalty_box_length": The distance from the goalline to the edge of the penalty area
+#' * "penalty_box_width": The width of the penalty area
+#' * "six_yard_box_length": The distance from the goalline to the edge of the six-yard box
+#' * "six_yard_box_width": The width of the six-yard box
+#' * "penalty_spot_distance": The distance from the goalline to the penalty spot
+#' * "goal_width": The distance from one goal post to the other
+#' * "origin_x": The minimum x coordinate of the pitch
+#' * "origin_y": The minimum y coordinate of the pitch
+#' * "penalty_arc_radius": The radius of the arc above the penalty box (Optional). Defaults to `penalty_spot_distance`
 #'
-#' \itemize{
-#'  \item{"length"}{The length of the pitch from one goal to the other (x axis)}
-#'  \item{"width"}{The width of the pitch from touchline to the other (y axis)}
-#'  \item{"penalty_box_length"}{The distance from the goalline to the edge of the penalty area}
-#'  \item{"penalty_box_width"}{The width of the penalty area}
-#'  \item{"six_yard_box_length"}{The distance from the goalline to the edge of the six-yard box}
-#'  \item{"six_yard_box_width"}{The width of the six-yard box}
-#'  \item{"penalty_spot_distance"}{The distance from the goalline to the penalty spot}
-#'  \item{"goal_width"}{The distance from one goal post to the other}
-#'  \item{"origin_x"}{The minimum x coordinate of the pitch}
-#'  \item{"origin_y"}{The minimum y coordinate of the pitch}
-#' }
-#'
-#' The following pitch dimensions are provided
-#' \itemize{
-#'  \item{"pitch_opta"}{For Opta f24 data}
-#'  \item{"pitch_statsbomb"}{For Statsbomb data}
-#'  \item{"pitch_wyscout"}{For Wyscout data}
-#'  \item{"pitch_international"}{As per UEFA Category 4 stadium regulations}
-#'  \item{"pitch_tracab"}{"For ChyronHego Tracab, using the 105m x 68m default size"}
-#' }
+#' The following pitch dimensions are provided:
+#' * "pitch_statsperform": For StatsPerform/Opta f24 data
+#' * "pitch_opta": Alias for "pitch_statsperform"
+#' * "pitch_statsbomb": For Statsbomb data
+#' * "pitch_wyscout": For Wyscout data
+#' * "pitch_international": As per UEFA Category 4 stadium regulations
+#' * "pitch_tracab": "For ChyronHego Tracab, using the 105m x 68m default size"
+#' * "pitch_impect": For IMPECT data
 #'
 #' @examples
 #' library(ggplot2)
@@ -73,7 +71,8 @@ pitch_statsbomb <- list(
   penalty_spot_distance = 12,
   goal_width = 8,
   origin_x = 0,
-  origin_y = 0
+  origin_y = 0,
+  penalty_arc_radius = 10
 )
 
 #' @rdname pitch_opta
@@ -96,6 +95,7 @@ pitch_wyscout <- list(
 #' @export
 # As per UEFA Category 4 regulations
 # Source: https://en.wikipedia.org/wiki/UEFA_stadium_categories
+# Source: https://en.wikipedia.org/wiki/Penalty_area
 pitch_international <- list(
   length = 105,
   width = 68,
@@ -106,7 +106,8 @@ pitch_international <- list(
   penalty_spot_distance = 11,
   goal_width = 7.32,
   origin_x = 0,
-  origin_y = 0
+  origin_y = 0,
+  penalty_arc_radius = 9.15
 )
 
 
@@ -149,3 +150,21 @@ make_pitch_tracab <- function(length=105, width=68){
 #' @rdname pitch_opta
 #' @export
 pitch_tracab <- make_pitch_tracab()
+
+
+#' @rdname pitch_opta
+#' @export
+# Source: https://glossary.impect.com/api-design?tab=2
+pitch_impect <- list(
+  length = 105,
+  width = 68,
+  penalty_box_length = 16.5,
+  penalty_box_width = 40.32,
+  six_yard_box_length = 5.5,
+  six_yard_box_width = 18.32,
+  penalty_spot_distance = 11,
+  goal_width = 7.32,
+  origin_x = -52.5,
+  origin_y = -34,
+  penalty_arc_radius = 10
+)

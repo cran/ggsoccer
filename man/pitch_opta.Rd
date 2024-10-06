@@ -8,19 +8,22 @@
 \alias{pitch_wyscout}
 \alias{pitch_international}
 \alias{pitch_tracab}
+\alias{pitch_impect}
 \title{Pitch dimensions}
 \format{
 An object of class \code{list} of length 10.
 
 An object of class \code{list} of length 10.
 
-An object of class \code{list} of length 10.
+An object of class \code{list} of length 11.
 
 An object of class \code{list} of length 10.
 
-An object of class \code{list} of length 10.
+An object of class \code{list} of length 11.
 
-An object of class \code{list} of length 10.
+An object of class \code{list} of length 11.
+
+An object of class \code{list} of length 11.
 }
 \usage{
 pitch_opta
@@ -34,6 +37,8 @@ pitch_wyscout
 pitch_international
 
 pitch_tracab
+
+pitch_impect
 }
 \description{
 The coordinate system used to generate pitch markings in
@@ -46,27 +51,29 @@ However, user-defined specifications can also be used.
 \details{
 A "pitch specification" is simply a list of dimensions that define a
 coordinate system. The required dimensions are:
-
 \itemize{
-\item{"length"}{The length of the pitch from one goal to the other (x axis)}
-\item{"width"}{The width of the pitch from touchline to the other (y axis)}
-\item{"penalty_box_length"}{The distance from the goalline to the edge of the penalty area}
-\item{"penalty_box_width"}{The width of the penalty area}
-\item{"six_yard_box_length"}{The distance from the goalline to the edge of the six-yard box}
-\item{"six_yard_box_width"}{The width of the six-yard box}
-\item{"penalty_spot_distance"}{The distance from the goalline to the penalty spot}
-\item{"goal_width"}{The distance from one goal post to the other}
-\item{"origin_x"}{The minimum x coordinate of the pitch}
-\item{"origin_y"}{The minimum y coordinate of the pitch}
+\item "length": The length of the pitch from one goal to the other (x axis)
+\item "width": The width of the pitch from touchline to the other (y axis)
+\item "penalty_box_length": The distance from the goalline to the edge of the penalty area
+\item "penalty_box_width": The width of the penalty area
+\item "six_yard_box_length": The distance from the goalline to the edge of the six-yard box
+\item "six_yard_box_width": The width of the six-yard box
+\item "penalty_spot_distance": The distance from the goalline to the penalty spot
+\item "goal_width": The distance from one goal post to the other
+\item "origin_x": The minimum x coordinate of the pitch
+\item "origin_y": The minimum y coordinate of the pitch
+\item "penalty_arc_radius": The radius of the arc above the penalty box (Optional). Defaults to \code{penalty_spot_distance}
 }
 
-The following pitch dimensions are provided
+The following pitch dimensions are provided:
 \itemize{
-\item{"pitch_opta"}{For Opta f24 data}
-\item{"pitch_statsbomb"}{For Statsbomb data}
-\item{"pitch_wyscout"}{For Wyscout data}
-\item{"pitch_international"}{As per UEFA Category 4 stadium regulations}
-\item{"pitch_tracab"}{"For ChyronHego Tracab, using the 105m x 68m default size"}
+\item "pitch_statsperform": For StatsPerform/Opta f24 data
+\item "pitch_opta": Alias for "pitch_statsperform"
+\item "pitch_statsbomb": For Statsbomb data
+\item "pitch_wyscout": For Wyscout data
+\item "pitch_international": As per UEFA Category 4 stadium regulations
+\item "pitch_tracab": "For ChyronHego Tracab, using the 105m x 68m default size"
+\item "pitch_impect": For IMPECT data
 }
 }
 \examples{
